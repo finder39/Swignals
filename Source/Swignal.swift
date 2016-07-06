@@ -46,7 +46,7 @@ internal class SwignalBase {
     }
 }
 
-class ObserverBase: Equatable {
+internal class ObserverBase: Equatable {
     let swignal: SwignalBase!
     weak var genericObserver: AnyObject?
     
@@ -59,7 +59,7 @@ class ObserverBase: Equatable {
     }
 }
 
-class ObserverGenericBase<L: AnyObject>: ObserverBase {
+internal class ObserverGenericBase<L: AnyObject>: ObserverBase {
     weak var observer: L? {
         didSet {
             genericObserver = observer
