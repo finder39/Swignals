@@ -8,35 +8,43 @@
 
 import Foundation
 
-
-typealias SwignalCallback3Args = (listener: AnyObject, arg1: AnyObject, arg2: AnyObject, arg3: AnyObject) -> ()
-
-
-class Swignal3Args: Swignal {
+class Swignal3Args<A,B,C>: SwignalBase {
     
-    func fire(arg1: AnyObject, arg2: AnyObject, arg3: AnyObject) {
-        handleFire(arg1, arg2, arg3)
+    func addObserver<L: AnyObject>(observer: L, callback: (observer: L, arg1: A, arg2: B, arg3: C) -> ()) {
+        let observer = Observer3Args(swignal: self, observer: observer, callback: callback)
+        addSwignalObserver(observer)
     }
     
-    func addObserver(observer: AnyObject, callback: SwignalCallback3Args) {
-        let swignalObserver = SwignalObserver3Args(swignal: self, observer: observer, callback: callback)
-        addSwignalObserver(swignalObserver)
+    func fire(arg1: A, arg2: B, arg3: C) {
+        synced(self) {
+            for watcher in self.swignalObservers {
+                watcher.fire(arg1, arg2, arg3)
+            }
+        }
     }
 }
 
-class SwignalObserver3Args: SwignalObserver {
-    let callback: SwignalCallback3Args
+private class Observer3Args<L: AnyObject,A,B,C>: ObserverGenericBase<L> {
+    let callback: (observer: L, arg1: A, arg2: B, arg3: C) -> ()
     
-    init(swignal: Swignal, observer: AnyObject, callback: SwignalCallback3Args) {
+    init(swignal: SwignalBase, observer: L, callback: (observer: L, arg1: A, arg2: B, arg3: C) -> ()) {
         self.callback = callback
         super.init(swignal: swignal, observer: observer)
     }
     
-    override func handleFire(args:[AnyObject]) {
+    override func fire(args: Any...) {
+        if let arg1 = args[0] as? A,
+            let arg2 = args[1] as? B,
+            let arg3 = args[2] as? C {
+            fire(arg1: arg1, arg2: arg2, arg3: arg3)
+        } else {
+            assert(false, "Types incorrect")
+        }
+    }
+    
+    private func fire(arg1 arg1: A, arg2: B, arg3: C) {
         if let observer = observer {
-            if args.count == 3 {
-                callback(listener: observer, arg1: args[0], arg2: args[1], arg3: [2])
-            }
+            callback(observer: observer, arg1: arg1, arg2: arg2, arg3: arg3)
         }
     }
 }

@@ -8,35 +8,42 @@
 
 import Foundation
 
-
-typealias SwignalCallback2Args = (listener: AnyObject, arg1: AnyObject, arg2: AnyObject) -> ()
-
-
-class Swignal2Args: Swignal {
+class Swignal2Args<A,B>: SwignalBase {
     
-    func fire(arg1: AnyObject, arg2: AnyObject) {
-        handleFire(arg1, arg2)
+    func addObserver<L: AnyObject>(observer: L, callback: (observer: L, arg1: A, arg2: B) -> ()) {
+        let observer = Observer2Args(swignal: self, observer: observer, callback: callback)
+        addSwignalObserver(observer)
     }
     
-    func addObserver(observer: AnyObject, callback: SwignalCallback2Args) {
-        let swignalObserver = SwignalObserver2Args(swignal: self, observer: observer, callback: callback)
-        addSwignalObserver(swignalObserver)
+    func fire(arg1: A, arg2: B) {
+        synced(self) {
+            for watcher in self.swignalObservers {
+                watcher.fire(arg1, arg2)
+            }
+        }
     }
 }
 
-class SwignalObserver2Args: SwignalObserver {
-    let callback: SwignalCallback2Args
+private class Observer2Args<L: AnyObject,A,B>: ObserverGenericBase<L> {
+    let callback: (observer: L, arg1: A, arg2: B) -> ()
     
-    init(swignal: Swignal, observer: AnyObject, callback: SwignalCallback2Args) {
+    init(swignal: SwignalBase, observer: L, callback: (observer: L, arg1: A, arg2: B) -> ()) {
         self.callback = callback
         super.init(swignal: swignal, observer: observer)
     }
     
-    override func handleFire(args:[AnyObject]) {
+    override func fire(args: Any...) {
+        if let arg1 = args[0] as? A,
+            let arg2 = args[1] as? B {
+            fire(arg1: arg1, arg2: arg2)
+        } else {
+            assert(false, "Types incorrect")
+        }
+    }
+    
+    private func fire(arg1 arg1: A, arg2: B) {
         if let observer = observer {
-            if args.count == 2 {
-                callback(listener: observer, arg1: args[0], arg2: args[1])
-            }
+            callback(observer: observer, arg1: arg1, arg2: arg2)
         }
     }
 }

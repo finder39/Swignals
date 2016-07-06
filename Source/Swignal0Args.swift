@@ -8,35 +8,28 @@
 
 import Foundation
 
-
-typealias SwignalCallback0Args = (listener: AnyObject) -> ()
-
-
-class Swignal0Args: Swignal {
+class Swignal0Args: SwignalBase {
     
-    func fire() {
-        handleFire()
+    func addObserver<L: AnyObject>(observer: L, callback: (observer: L) -> ()) {
+        let observer = Observer0Args(swignal: self, observer: observer, callback: callback)
+        addSwignalObserver(observer
+        )
     }
     
-    func addObserver(observer: AnyObject, callback: SwignalCallback0Args) {
-        let swignalObserver = SwignalObserver0Arg(swignal: self, observer: observer, callback: callback)
-        addSwignalObserver(swignalObserver)
+    func fire() {
+        synced(self) {
+            for watcher in self.swignalObservers {
+                watcher.fire()
+            }
+        }
     }
 }
 
-class SwignalObserver0Arg: SwignalObserver {
-    let callback: SwignalCallback0Args
+private class Observer0Args<L: AnyObject>: ObserverGenericBase<L> {
+    let callback: (observer: L) -> ()!
     
-    init(swignal: Swignal, observer: AnyObject, callback: SwignalCallback0Args) {
+    init(swignal: SwignalBase, observer: L, callback: (observer: L) -> ()) {
         self.callback = callback
         super.init(swignal: swignal, observer: observer)
-    }
-    
-    override func handleFire(args:[AnyObject]) {
-        if let observer = observer {
-            if args.count == 0 {
-                callback(listener: observer)
-            }
-        }
     }
 }

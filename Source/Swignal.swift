@@ -8,11 +8,10 @@
 
 import Foundation
 
-class Swignal {
+internal class SwignalBase {
+    internal var swignalObservers: [ObserverBase] = []
     
-    private var swignalObservers: [SwignalObserver] = []
-    
-    internal func addSwignalObserver(swignalObserver: SwignalObserver) {
+    internal func addSwignalObserver(swignalObserver: ObserverBase) {
         purgeDeallocatedListeners()
         
         synced(self) {
@@ -23,7 +22,7 @@ class Swignal {
     func removeObserver(observer: AnyObject) {
         synced(self) {
             for swignalObserver in self.swignalObservers {
-                if swignalObserver.observer === observer {
+                if swignalObserver.genericObserver === observer {
                     self.swignalObservers.removeObject(swignalObserver)
                 }
             }
@@ -36,22 +35,10 @@ class Swignal {
         }
     }
     
-    func handleFire(args:AnyObject...) {
-        purgeDeallocatedListeners()
-        
-        synced(self) {
-            for swignalObserver in self.swignalObservers {
-                if swignalObserver.observer != nil {
-                    swignalObserver.handleFire(args)
-                }
-            }
-        }
-    }
-    
     private func purgeDeallocatedListeners() {
         synced(self) {
             for swignalObserver in self.swignalObservers {
-                if swignalObserver.observer == nil {
+                if swignalObserver.genericObserver == nil {
                     self.removeObserver(swignalObserver)
                 }
             }
@@ -59,81 +46,40 @@ class Swignal {
     }
 }
 
-// MARK: Type Confirmation
-extension Swignal {
+class ObserverBase: Equatable {
+    let swignal: SwignalBase!
+    weak var genericObserver: AnyObject?
     
-    static func typeConfirmation<L>(listener listener: (object: AnyObject, type: L.Type),
-                                callback: (typedListener: L) ->()) {
-        if let listenerTyped = listener as? L {
-            callback(typedListener: listenerTyped)
-        } else {
-            assert(false, "Types incorrect")
-        }
-    }
-    
-    static func typeConfirmation<L,A>(listener listener: (object: AnyObject, type: L.Type),
-                                arg1: (object: AnyObject, type: A.Type),
-                                callback: (typedListener: L, typedArg1: A) ->()) {
-        if let listenerTyped = listener.object as? L,
-            let arg1Typed = arg1.object as? A {
-            callback(typedListener: listenerTyped, typedArg1: arg1Typed)
-        } else {
-            assert(false, "Types incorrect")
-        }
-    }
-    
-    static func typeConfirmation<L,A,B>(listener listener: (object: AnyObject, type: L.Type),
-                                arg1: (object: AnyObject, type: A.Type),
-                                arg2: (object: AnyObject, type: B.Type),
-                                callback: (typedListener: L, typedArg1: A, typedArg2: B) ->()) {
-        if let listenerTyped = listener as? L,
-            let arg1Typed = arg1.object as? A,
-            let arg2Typed = arg2.object as? B {
-            callback(typedListener: listenerTyped, typedArg1: arg1Typed, typedArg2: arg2Typed)
-        } else {
-            assert(false, "Types incorrect")
-        }
-    }
-    
-    static func typeConfirmation<L,A,B,C>(listener listener: (object: AnyObject, type: L.Type),
-                                arg1: (object: AnyObject, type: A.Type),
-                                arg2: (object: AnyObject, type: B.Type),
-                                arg3: (object: AnyObject, type: C.Type),
-                                callback: (typedListener: L, typedArg1: A, typedArg2: B, typedArg3: C) ->()) {
-        if let listenerTyped = listener as? L,
-            let arg1Typed = arg1.object as? A,
-            let arg2Typed = arg2.object as? B,
-            let arg3Typed = arg3.object as? C {
-            callback(typedListener: listenerTyped, typedArg1: arg1Typed, typedArg2: arg2Typed, typedArg3: arg3Typed)
-        } else {
-            assert(false, "Types incorrect")
-        }
-    }
-}
-
-// MARK: SignalObserver
-class SwignalObserver: Equatable {
-    let swignal: Swignal!
-    weak var observer: AnyObject?
-    
-    init(swignal: Swignal, observer: AnyObject) {
+    init(swignal: SwignalBase) {
         self.swignal = swignal
-        self.observer = observer
     }
     
-    func handleFire(args:[AnyObject]) {
+    func fire(args: Any...) {
         assert(false, "This method must be overriden by the subclass")
     }
 }
 
-func ==(lhs: SwignalObserver, rhs: SwignalObserver) -> Bool {
+class ObserverGenericBase<L: AnyObject>: ObserverBase {
+    weak var observer: L? {
+        didSet {
+            genericObserver = observer
+        }
+    }
+    
+    init(swignal: SwignalBase, observer: L) {
+        self.observer = observer
+        super.init(swignal: swignal)
+    }
+}
+
+func ==(lhs: ObserverBase, rhs: ObserverBase) -> Bool {
     return lhs === rhs
 }
 
 
 
 // MARK: Helpers
-private func synced(lock: AnyObject, closure: () -> ()) {
+internal func synced(lock: AnyObject, closure: () -> ()) {
     objc_sync_enter(lock)
     closure()
     objc_sync_exit(lock)
