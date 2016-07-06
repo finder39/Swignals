@@ -32,4 +32,10 @@ private class Observer0Args<L: AnyObject>: ObserverGenericBase<L> {
         self.callback = callback
         super.init(swignal: swignal, observer: observer)
     }
+    
+    override func fire(args: Any...) {
+        if let observer = observer {
+            callback(observer: observer)
+        }
+    }
 }
