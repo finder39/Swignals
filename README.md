@@ -2,11 +2,38 @@
 
 Swignals is an observable pattern system built entirely in Swift.
 
-### Installing
+## Installing
 
-Drag all the files from the Source folder into your project.
+You can either drag all the files from the Source folder into your project, or install it using CocoaPods.
 
-### Example
+### CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+> CocoaPods 0.39.0+ is required to build Swignals.
+
+To integrate Swignals into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
+
+target '<Your Target Name>' do
+    pod 'Swignals', '~> 0.1'
+end
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+## Example
 
 Lets say we wanted to add a swignal to an AudioPlayer class whenever shuffle is set. It could look something like this:
 
@@ -46,13 +73,9 @@ class ControlsViewController: UIViewController {
 }
 ```
 
-## Versioning
-
-Swignals uses [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
-
 ## Authors
 
-* **Joseph Neuman** - *Initial work*
+* **[Joseph Neuman](https://twitter.com/finder39)** - *Initial work*
 
 ## License
 
