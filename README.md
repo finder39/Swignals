@@ -1,6 +1,6 @@
 # Swignals
 
-Swignals is an observable pattern system built entirely in Swift.
+Swignals is an observable pattern system written entirely in Swift.
 
 ## Installing
 

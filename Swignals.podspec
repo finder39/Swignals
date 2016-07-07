@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'Swignals'
   s.version          = '0.1.0'
-  s.summary          = 'Swignals is an observable pattern system built entirely in Swift.'
+  s.summary          = 'Swignals is an observable pattern system written entirely in Swift.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
 #   s.description      = <<-DESC
-# Swignals is an observable pattern system built entirely in Swift.
+# Swignals is an observable pattern system written entirely in Swift.
 #                        DESC
 
   s.homepage         = 'https://github.com/finder39/Swignals'
