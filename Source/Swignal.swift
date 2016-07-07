@@ -67,7 +67,10 @@ internal class ObserverGenericBase<L: AnyObject>: ObserverBase {
     }
     
     init(swignal: SwignalBase, observer: L) {
-        self.observer = observer
+        defer {
+            // This is defered so that the didSet is called. didSet is normally not called when a ar is set within an init.
+            self.observer = observer
+        }
         super.init(swignal: swignal)
     }
 }
