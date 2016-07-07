@@ -2,6 +2,8 @@
 
 Swignals is an observable pattern system written entirely in Swift.
 
+[![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Swignals.svg)](https://img.shields.io/cocoapods/v/Swignals.svg)
+
 ## Installing
 
 You can either drag all the files from the Source folder into your project, or install it using CocoaPods.
