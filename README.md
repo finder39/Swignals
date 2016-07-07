@@ -80,6 +80,10 @@ class ControlsViewController: UIViewController {
 
 * **[Joseph Neuman](https://twitter.com/finder39)** - *Initial work*
 
+## Acknowledgements
+
+* This is based on [Uber's Signals library](https://github.com/uber/signals-ios)
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
