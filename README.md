@@ -82,7 +82,7 @@ class ControlsViewController: UIViewController {
 
 ## Acknowledgements
 
-* This is based on [Uber's Signals library](https://github.com/uber/signals-ios)
+* This is based on [Uber's Signals library](https://github.com/uber/signals-ios) which was written by [Tuomas Artman](https://github.com/artman)
 
 ## License
 
