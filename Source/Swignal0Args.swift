@@ -10,16 +10,16 @@ import Foundation
 
 public class Swignal0Args: SwignalBase {
     
-    override init() {
+    public override init() {
     }
     
-    func addObserver<L: AnyObject>(observer: L, callback: (observer: L) -> ()) {
+    public func addObserver<L: AnyObject>(observer: L, callback: (observer: L) -> ()) {
         let observer = Observer0Args(swignal: self, observer: observer, callback: callback)
         addSwignalObserver(observer
         )
     }
     
-    func fire() {
+    public func fire() {
         synced(self) {
             for watcher in self.swignalObservers {
                 watcher.fire()

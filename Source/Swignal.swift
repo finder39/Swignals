@@ -19,7 +19,7 @@ public class SwignalBase {
         }
     }
     
-    func removeObserver(observer: AnyObject) {
+    public func removeObserver(observer: AnyObject) {
         synced(self) {
             for swignalObserver in self.swignalObservers {
                 if swignalObserver.genericObserver === observer {
@@ -29,7 +29,7 @@ public class SwignalBase {
         }
     }
     
-    func removeAllObservers() {
+    public func removeAllObservers() {
         synced(self) {
             self.swignalObservers.removeAll()
         }
