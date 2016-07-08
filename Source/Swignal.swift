@@ -8,7 +8,7 @@
 
 import Foundation
 
-internal class SwignalBase {
+public class SwignalBase {
     internal var swignalObservers: [ObserverBase] = []
     
     internal func addSwignalObserver(swignalObserver: ObserverBase) {

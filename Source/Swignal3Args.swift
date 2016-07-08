@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Swignal3Args<A,B,C>: SwignalBase {
+public class Swignal3Args<A,B,C>: SwignalBase {
     
     func addObserver<L: AnyObject>(observer: L, callback: (observer: L, arg1: A, arg2: B, arg3: C) -> ()) {
         let observer = Observer3Args(swignal: self, observer: observer, callback: callback)
