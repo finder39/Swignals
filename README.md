@@ -46,10 +46,10 @@ typealias OnShuffleChangedSwignal = Swignal1Arg<Bool>
 class AudioPlayer {
     static let sharedInstance = AudioPlayer()
 
-    let onShuffleChangedSwignal = OnShuffleChangedSwignal()
+    let onShuffleChanged = OnShuffleChangedSwignal()
     var shuffle: Bool = false {
         didSet {
-            onShuffleChangedSwignal.fire(shuffle)
+            onShuffleChanged.fire(shuffle)
         }
     }
 }
@@ -60,7 +60,7 @@ Then to subscribe to that signal you'd do the following:
 ```swift
 class ControlsViewController: UIViewController {
     init() {
-        AudioPlayer.sharedInstance.onShuffleChangedSwignal.addObserver(self) { (observer, arg1) in
+        AudioPlayer.sharedInstance.onShuffleChanged.addObserver(self) { (observer, arg1) in
         // note: you can rename the variables in the callback such as
         // callback: { (weakSelf, shuffle) in
             if let favoriteTracksDataSource = observer.tracksDataSource as? FavoriteTracksDataSource {
