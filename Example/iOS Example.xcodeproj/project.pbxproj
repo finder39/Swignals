@@ -123,7 +123,7 @@
 				D806706F1D2E23C30092793B /* Swignal5Args.swift */,
 			);
 			name = Swignals;
-			path = ../../../Source;
+			path = ../../Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -429,6 +429,7 @@
 				D80670641D2E23A00092793B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D80670651D2E23A00092793B /* Build configuration list for PBXNativeTarget "iOS ExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -437,6 +438,7 @@
 				D80670671D2E23A00092793B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
