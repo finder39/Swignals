@@ -10,6 +10,9 @@ import Foundation
 
 public class Swignal3Args<A,B,C>: SwignalBase {
     
+    override init() {
+    }
+    
     func addObserver<L: AnyObject>(observer: L, callback: (observer: L, arg1: A, arg2: B, arg3: C) -> ()) {
         let observer = Observer3Args(swignal: self, observer: observer, callback: callback)
         addSwignalObserver(observer)
