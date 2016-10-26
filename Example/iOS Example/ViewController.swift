@@ -37,45 +37,45 @@ class ViewController: UIViewController {
         onCountChangedSwignal.addObserver(countOne) { (weakButton, count, button) in
             weakButton.text = "\(count)"
             if button === self.minusOne {
-                weakButton.textColor = UIColor.redColor()
+                weakButton.textColor = UIColor.red
             } else if button === self.plusOne {
-                weakButton.textColor = UIColor.greenColor()
+                weakButton.textColor = UIColor.green
             }
         }
         
         onCountChangedSwignal.addObserver(countTwo) { (weakButton, count, button) in
             weakButton.text = "\(count)"
             if button === self.minusOne {
-                weakButton.textColor = UIColor.redColor()
+                weakButton.textColor = UIColor.red
             } else if button === self.plusOne {
-                weakButton.textColor = UIColor.greenColor()
+                weakButton.textColor = UIColor.green
             }
         }
         
         onCountChangedSwignal.addObserver(countThree) { (weakButton, count, button) in
             weakButton.text = "\(count)"
             if button === self.minusOne {
-                weakButton.textColor = UIColor.redColor()
+                weakButton.textColor = UIColor.red
             } else if button === self.plusOne {
-                weakButton.textColor = UIColor.greenColor()
+                weakButton.textColor = UIColor.green
             }
         }
     }
 
-    @IBAction func colorButtonTapped(sender: UIButton) {
+    @IBAction func colorButtonTapped(_ sender: UIButton) {
         switch sender {
         case redButton:
-            onColorChangedSwignal.fire(UIColor.redColor())
+            onColorChangedSwignal.fire(UIColor.red)
         case blueButton:
-            onColorChangedSwignal.fire(UIColor.blueColor())
+            onColorChangedSwignal.fire(UIColor.blue)
         case greenButton:
-            onColorChangedSwignal.fire(UIColor.greenColor())
+            onColorChangedSwignal.fire(UIColor.green)
         default:
             break
         }
     }
     
-    @IBAction func countAdjusterPressed(sender: UIButton) {
+    @IBAction func countAdjusterPressed(_ sender: UIButton) {
         switch sender {
         case minusOne:
             count -= 1

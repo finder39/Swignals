@@ -8,17 +8,17 @@
 
 import Foundation
 
-public class Swignal4Args<A,B,C,D>: SwignalBase {
+open class Swignal4Args<A,B,C,D>: SwignalBase {
     
     public override init() {
     }
     
-    public func addObserver<L: AnyObject>(observer: L, callback: (observer: L, arg1: A, arg2: B, arg3: C, arg4: D) -> ()) {
+    open func addObserver<L: AnyObject>(_ observer: L, callback: @escaping (_ observer: L, _ arg1: A, _ arg2: B, _ arg3: C, _ arg4: D) -> ()) {
         let observer = Observer4Args(swignal: self, observer: observer, callback: callback)
         addSwignalObserver(observer)
     }
     
-    public func fire(arg1: A, arg2: B, arg3: C, arg4: D) {
+    open func fire(_ arg1: A, arg2: B, arg3: C, arg4: D) {
         synced(self) {
             for watcher in self.swignalObservers {
                 watcher.fire(arg1, arg2, arg3, arg4)
@@ -28,14 +28,14 @@ public class Swignal4Args<A,B,C,D>: SwignalBase {
 }
 
 private class Observer4Args<L: AnyObject,A,B,C,D>: ObserverGenericBase<L> {
-    let callback: (observer: L, arg1: A, arg2: B, arg3: C, arg4: D) -> ()
+    let callback: (_ observer: L, _ arg1: A, _ arg2: B, _ arg3: C, _ arg4: D) -> ()
     
-    init(swignal: SwignalBase, observer: L, callback: (observer: L, arg1: A, arg2: B, arg3: C, arg4: D) -> ()) {
+    init(swignal: SwignalBase, observer: L, callback: @escaping (_ observer: L, _ arg1: A, _ arg2: B, _ arg3: C, _ arg4: D) -> ()) {
         self.callback = callback
         super.init(swignal: swignal, observer: observer)
     }
     
-    override func fire(args: Any...) {
+    override func fire(_ args: Any...) {
         if let arg1 = args[0] as? A,
             let arg2 = args[1] as? B,
             let arg3 = args[2] as? C,
@@ -46,9 +46,9 @@ private class Observer4Args<L: AnyObject,A,B,C,D>: ObserverGenericBase<L> {
         }
     }
     
-    private func fire(arg1 arg1: A, arg2: B, arg3: C, arg4: D) {
+    fileprivate func fire(arg1: A, arg2: B, arg3: C, arg4: D) {
         if let observer = observer {
-            callback(observer: observer, arg1: arg1, arg2: arg2, arg3: arg3, arg4: arg4)
+            callback(observer, arg1, arg2, arg3, arg4)
         }
     }
 }
