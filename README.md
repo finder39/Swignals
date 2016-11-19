@@ -26,7 +26,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'Swignals', '~> 0.1'
+    pod 'Swignals', '~> 1.0'
 end
 ```
 
