@@ -8,17 +8,17 @@
 
 import Foundation
 
-public class Swignal1Arg<A>: SwignalBase {
+open class Swignal1Arg<A>: SwignalBase {
     
     public override init() {
     }
     
-    public func addObserver<L: AnyObject>(observer: L, callback: (observer: L, arg1: A) -> ()) {
+    open func addObserver<L: AnyObject>(_ observer: L, callback: @escaping (_ observer: L, _ arg1: A) -> ()) {
         let observer = Observer1Args(swignal: self, observer: observer, callback: callback)
         addSwignalObserver(observer)
     }
     
-    public func fire(arg1: A) {
+    open func fire(_ arg1: A) {
         synced(self) {
             for watcher in self.swignalObservers {
                 watcher.fire(arg1)
@@ -28,14 +28,14 @@ public class Swignal1Arg<A>: SwignalBase {
 }
 
 private class Observer1Args<L: AnyObject,A>: ObserverGenericBase<L> {
-    let callback: (observer: L, arg1: A) -> ()
+    let callback: (_ observer: L, _ arg1: A) -> ()
     
-    init(swignal: SwignalBase, observer: L, callback: (observer: L, arg1: A) -> ()) {
+    init(swignal: SwignalBase, observer: L, callback: @escaping (_ observer: L, _ arg1: A) -> ()) {
         self.callback = callback
         super.init(swignal: swignal, observer: observer)
     }
     
-    override func fire(args: Any...) {
+    override func fire(_ args: Any...) {
         if let arg1 = args[0] as? A {
             fire(arg1: arg1)
         } else {
@@ -43,9 +43,9 @@ private class Observer1Args<L: AnyObject,A>: ObserverGenericBase<L> {
         }
     }
     
-    private func fire(arg1 arg1: A) {
+    fileprivate func fire(arg1: A) {
         if let observer = observer {
-            callback(observer: observer, arg1: arg1)
+            callback(observer, arg1)
         }
     }
 }

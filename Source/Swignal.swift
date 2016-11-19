@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class SwignalBase {
+open class SwignalBase {
     internal var swignalObservers: [ObserverBase] = []
     
-    internal func addSwignalObserver(swignalObserver: ObserverBase) {
+    internal func addSwignalObserver(_ swignalObserver: ObserverBase) {
         purgeDeallocatedListeners()
         
         synced(self) {
@@ -19,7 +19,7 @@ public class SwignalBase {
         }
     }
     
-    public func removeObserver(observer: AnyObject) {
+    open func removeObserver(_ observer: AnyObject) {
         synced(self) {
             for swignalObserver in self.swignalObservers {
                 if swignalObserver.genericObserver === observer {
@@ -29,13 +29,13 @@ public class SwignalBase {
         }
     }
     
-    public func removeAllObservers() {
+    open func removeAllObservers() {
         synced(self) {
             self.swignalObservers.removeAll()
         }
     }
     
-    private func purgeDeallocatedListeners() {
+    fileprivate func purgeDeallocatedListeners() {
         synced(self) {
             for swignalObserver in self.swignalObservers {
                 if swignalObserver.genericObserver == nil {
@@ -54,7 +54,7 @@ internal class ObserverBase: Equatable {
         self.swignal = swignal
     }
     
-    func fire(args: Any...) {
+    func fire(_ args: Any...) {
         assert(false, "This method must be overriden by the subclass")
     }
 }
@@ -82,14 +82,14 @@ func ==(lhs: ObserverBase, rhs: ObserverBase) -> Bool {
 
 
 // MARK: Helpers
-internal func synced(lock: AnyObject, closure: () -> ()) {
+internal func synced(_ lock: AnyObject, closure: () -> ()) {
     objc_sync_enter(lock)
     closure()
     objc_sync_exit(lock)
 }
 
 private extension Array {
-    mutating func removeObject<T where T : Equatable>(obj: T) {
+    mutating func removeObject<T>(_ obj: T) where T : Equatable {
         self = self.filter({$0 as? T != obj})
     }
     
